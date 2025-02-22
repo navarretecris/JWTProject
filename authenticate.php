@@ -15,9 +15,9 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password'])) {
     $payload = [
-        "iss" => "http://localhost", // Emisor
-        "aud" => "http://localhost", // Audiencia
-        "iat" => time(), // Tiempo de emisión
+        "iss" => "http://localhost",
+        "aud" => "http://localhost",
+        "iat" => time(),
         "exp" => time() + 3600, // Expira en 1 hora
         "data" => [
             "id" => $user['id'],
@@ -27,7 +27,10 @@ if ($user && password_verify($password, $user['password'])) {
 
     $jwt = JWT::encode($payload, $key, 'HS256');
 
-    echo json_encode(["success" => true, "token" => $jwt]);
+    // Guardar el token en una cookie
+    setcookie("token", $jwt, time() + 3600, "/"); // Expira en 1 hora
+
+    echo json_encode(["success" => true, "username" => $user['username']]);
 } else {
     echo json_encode(["success" => false, "message" => "Credenciales incorrectas"]);
 }

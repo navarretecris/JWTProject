@@ -9,18 +9,20 @@
     <div class="container mt-5">
         <div class="card p-4 shadow">
             <h2 class="text-center">Iniciar Sesión</h2>
-            <form id="loginForm" method="POST" action="authenticate.php">
+            <form id="loginForm">
                 <div class="mb-3">
                     <label for="username" class="form-label">Usuario</label>
-                    <input type="text" class="form-control" name="username" required>
+                    <input type="text" class="form-control" id="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" name="password" required>
+                    <input type="password" class="form-control" id="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
             </form>
         </div>
     </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
