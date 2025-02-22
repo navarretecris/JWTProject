@@ -2,8 +2,12 @@
 require 'vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
-$key = "a8f0353bad27f05cbe851f076e97cf722ae3907ffd95e94707cc5e06064f6822";
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$key = $_ENV['JWT_SECRET'];
 $pdo = new PDO("mysql:host=localhost;dbname=jwt_login", "root", "");
 
 $username = $_POST['username'];
@@ -27,8 +31,14 @@ if ($user && password_verify($password, $user['password'])) {
 
     $jwt = JWT::encode($payload, $key, 'HS256');
 
-    // Guardar el token en una cookie
-    setcookie("token", $jwt, time() + 3600, "/"); // Expira en 1 hora
+    // Guardar el token en una cookie segura
+    setcookie("token", $jwt, [
+        'expires' => time() + 3600,
+        'path' => '/',
+        'httponly' => true,
+        'secure' => true,
+        'samesite' => 'Strict'
+    ]);
 
     echo json_encode(["success" => true, "username" => $user['username']]);
 } else {

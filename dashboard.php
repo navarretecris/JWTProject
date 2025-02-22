@@ -2,10 +2,14 @@
 require 'vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
-$key = "a8f0353bad27f05cbe851f076e97cf722ae3907ffd95e94707cc5e06064f6822";
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : null; // Obtener token desde cookies
+$key = $_ENV['JWT_SECRET'];
+
+$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : null;
 
 if (!$token) {
     header("Location: login.php");
@@ -16,7 +20,7 @@ try {
     $decoded = JWT::decode($token, new Key($key, 'HS256'));
     $username = $decoded->data->username;
 } catch (Exception $e) {
-    header("Location: login.php");
+    header("Location: login.php?error=invalid_token");
     exit();
 }
 ?>

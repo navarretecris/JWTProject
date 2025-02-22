@@ -1,18 +1,19 @@
 <?php
-$host = 'localhost';
-$dbname = 'jwt_login'; // Cambia este nombre si tu base de datos se llama diferente
-$username = 'root'; // Usuario por defecto en XAMPP
-$password = ''; // Contraseña por defecto en XAMPP (vacía)
+require 'vendor/autoload.php';
+use Dotenv\Dotenv;
 
-// Crear conexión usando PDO
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$host = $_ENV['DB_HOST'];
+$dbname = $_ENV['DB_NAME'];
+$username = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASS'];
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    // Configurar PDO para que lance excepciones en caso de error
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Confirmar conexión exitosa
-    echo "Conexión exitosa a la base de datos.";
 } catch (PDOException $e) {
-    // Mostrar error si la conexión falla
     die("Error de conexión: " . $e->getMessage());
 }
 ?>
